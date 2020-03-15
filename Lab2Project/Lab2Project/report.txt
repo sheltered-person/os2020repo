@@ -1,0 +1,5 @@
+Report from file "report.bin"
+
+Number	Name	Hours	Salary
+1	Liz	40	4000
+2	Dan	45	4500
