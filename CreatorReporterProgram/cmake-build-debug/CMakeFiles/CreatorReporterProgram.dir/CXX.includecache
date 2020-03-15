@@ -1,0 +1,92 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Creation/Creator.h
+iostream
+-
+fstream
+-
+limits
+-
+../Include/Employee.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Include/Employee.h
+../Process Maintaince/RunnableProgram.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/RunnableProgram.h
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/IO Classes/FilePrinter.h
+../Include/Employee.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Include/Employee.h
+iostream
+-
+fstream
+-
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/IO Classes/InputClass.h
+../Include/Employee.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Include/Employee.h
+iostream
+-
+limits
+-
+string
+-
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Include/Employee.h
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/ProcessMaintainer.h
+iostream
+-
+string
+-
+unistd.h
+-
+wait.h
+-
+RunnableProgram.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/RunnableProgram.h
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/RunnableProgram.h
+fstream
+-
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Reporting/Reporter.h
+iostream
+-
+fstream
+-
+SalaryCounter.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Reporting/SalaryCounter.h
+../Process Maintaince/RunnableProgram.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/RunnableProgram.h
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/Reporting/SalaryCounter.h
+iostream
+-
+string
+-
+../Include/Employee.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Include/Employee.h
+
+/home/sheltered/CLionProjects/CreatorReporterProgram/main.cpp
+iostream
+-
+string
+-
+IO Classes/FilePrinter.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/IO Classes/FilePrinter.h
+IO Classes/InputClass.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/IO Classes/InputClass.h
+Process Maintaince/ProcessMaintainer.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Process Maintaince/ProcessMaintainer.h
+Creation/Creator.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Creation/Creator.h
+Reporting/Reporter.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/Reporting/Reporter.h
+IO Classes/InputClass.h
+/home/sheltered/CLionProjects/CreatorReporterProgram/IO Classes/InputClass.h
+

@@ -1,0 +1,5 @@
+Report from file "reporter.txt" 
+
+Number	Name	Hours	Salary
+11	Hello	22	242
+33	World	44	484
