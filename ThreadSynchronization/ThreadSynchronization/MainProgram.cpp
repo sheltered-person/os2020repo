@@ -10,42 +10,62 @@ int main()
 	std::cout << "Enter array size (int): ";
 	std::cin >> size;
 
-	int* a = new int[size]();
+	int* a = new int[size];
+
+	for (int i = 0; i < size; i++)
+		a[i] = 0;
 
 	int thAmount;
 
 	std::cout << "Enter the amount of threads: ";
 	std::cin >> thAmount;
 
-	if (ThreadRunner::CreateAndRunThreads(a, size, thAmount) != 0)
+	ThreadRunner* runner;
+
+	try 
 	{
-		std::cout << "Try again later.\n";
-		system("pause");
+		runner = new ThreadRunner(a, size, thAmount);
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << ex.what() << '\n';
 		return -1;
 	}
 
-	int termOne = 0;
+	if (runner->CreateAndRunThreads() != 0)
+	{
+		std::cerr << "Thread creation error occured.\n";
+		system("pause");
+		return -2;
+	}
+
+	int canceledOne = 0;
 
 	while (thAmount > 0)
 	{
-		ThreadRunner::WaitThreads();
-		ThreadRunner::PrintData(a, size);
+		runner->WaitThreads();
+		runner->PrintData();
 
-		std::cout << "Choose a thread number to terminate: ";
-		std::cin >> termOne;
+		std::cout << "Choose a thread number to cancel: ";
+		std::cin >> canceledOne;
 
-		if (!ThreadRunner::TerminateThread(termOne - 1))
-			std::cout << "Couldn't kill Marker!";
+		bool isCanceled 
+			= runner->TryCancelThread(canceledOne - 1);
+
+		if (!isCanceled)
+			std::cout << "Thread ia already cancelled!";
 		else
 			thAmount--;
 
-		ThreadRunner::ResetThreads();
+		runner->ResetThreads();
 	}
 
-	ThreadRunner::PrintData(a, size);
-	ThreadRunner::CleanData();
+	runner->PrintData();
+
+	delete runner;
 
 	std::cout << "\n\n";
 	system("pause");
+
 	return 0;
 }

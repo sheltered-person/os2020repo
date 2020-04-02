@@ -9,34 +9,39 @@
 class ThreadRunner
 {
 private:
-	static HANDLE hWriteEvent;
-	static HANDLE* hFinishEvents;
-	static HANDLE* hContinueEvents;
-	static HANDLE* hTerminateEvents;
+	HANDLE hWriteEvent;
+	HANDLE* hFinishEvents;
+	HANDLE* hContinueEvents;
+	HANDLE* hCancellationEvents;
 
-	static ThreadFunc* functions;
-	static ThreadParams* params;
-	static SimpleThread** threads;
+	ThreadFunc* functions;
+	ThreadParams* params;
+	SimpleThread** threads;
 
-	static int thAmount;
+	int* a;
+	int size;
+
+	int thAmount;
+
+	int InitSyncObjects();
+	void CleanSyncObjects();
+
+	void InitData();
+	int CleanData();
 
 public:
-	static int InitSyncObjects();
+	ThreadRunner(int* a, int size, int thAmount);
 
-	static void CleanSyncObjects();
+	int CreateAndRunThreads();
 
-	static int CreateAndRunThreads(int* a, int size, int thAmount);
+	void WaitThreads();
 
-	static void InitData(int* a, int size);
+	void PrintData() const;
 
-	static void WaitThreads();
+	bool TryCancelThread(int i);
 
-	static void PrintData(int*a, int size);
+	void ResetThreads();
 
-	static bool TerminateThread(int i);
-
-	static void ResetThreads();
-
-	static int CleanData();
+	virtual ~ThreadRunner();
 };
 

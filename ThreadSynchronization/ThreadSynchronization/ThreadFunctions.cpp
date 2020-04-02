@@ -3,6 +3,7 @@
 #include <limits>
 #include <exception>
 #include <iostream>
+#include <vector>
 
 
 extern CRITICAL_SECTION csConsole;
@@ -50,15 +51,12 @@ void PrintTerminationMessage(int thNum)
 }
 
 
-void RestoreArray(int* a, int size, bool* marked)
+void RestoreArray(int* a, int size, std::vector<int> marked)
 {
 	EnterCriticalSection(&csArray);
 
-	for (int i = 0; i < size; i++)
-	{
-		if (marked[i])
-			a[i] = 0;
-	}
+	for (int i : marked)
+		a[i] = 0;
 
 	LeaveCriticalSection(&csArray);
 }
@@ -78,7 +76,7 @@ DWORD __stdcall MarkerThreadFunc(LPVOID lpvParams)
 	int thNum = params->thNum;
 	int markCount = 0;
 
-	bool* marks = new bool[params->size]();
+	std::vector<int> marked(params->size);
 
 	srand(thNum);
 
@@ -95,7 +93,7 @@ DWORD __stdcall MarkerThreadFunc(LPVOID lpvParams)
 
 		if (isMarked)
 		{
-			marks[nextValue] = true;
+			marked.push_back(nextValue);
 			markCount++;
 		}
 		else
@@ -115,10 +113,9 @@ DWORD __stdcall MarkerThreadFunc(LPVOID lpvParams)
 
 			if (dwWaitResult == WAIT_OBJECT_0)
 			{
-				RestoreArray(params->a, params->size, marks);
+				RestoreArray(params->a, params->size, marked);
 				PrintTerminationMessage(thNum);
 
-				delete[] marks;
 				return 0;
 			}
 		}

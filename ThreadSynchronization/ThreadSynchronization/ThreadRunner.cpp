@@ -4,17 +4,14 @@
 CRITICAL_SECTION csConsole;
 CRITICAL_SECTION csArray;
 
-HANDLE ThreadRunner::hWriteEvent = nullptr;
-HANDLE* ThreadRunner::hFinishEvents = nullptr;
 
-ThreadFunc* ThreadRunner::functions = nullptr;
-ThreadParams* ThreadRunner::params = nullptr;
-SimpleThread** ThreadRunner::threads = nullptr;
-HANDLE* ThreadRunner::hContinueEvents = nullptr;
-HANDLE* ThreadRunner::hTerminateEvents = nullptr;
+ThreadRunner::ThreadRunner(int* a, int size, int thAmount) : a(a), size(size), thAmount(thAmount)
+{
+	if (InitSyncObjects() != 0)
+		throw "Invalid thread runner initialization.";
 
-
-int ThreadRunner::thAmount = 0;
+	InitData();
+}
 
 
 int ThreadRunner::InitSyncObjects()
@@ -30,7 +27,7 @@ int ThreadRunner::InitSyncObjects()
 
 	hFinishEvents = new HANDLE[thAmount];
 	hContinueEvents = new HANDLE[thAmount];
-	hTerminateEvents = new HANDLE[thAmount];
+	hCancellationEvents = new HANDLE[thAmount];
 
 	for (int i = 0; i < thAmount; i++) 
 	{
@@ -46,10 +43,10 @@ int ThreadRunner::InitSyncObjects()
 		if (hContinueEvents[i] == NULL)
 			return -3;
 
-		hTerminateEvents[i] = CreateEventA(
+		hCancellationEvents[i] = CreateEventA(
 			NULL, TRUE, FALSE, NULL);
 
-		if (hTerminateEvents[i] == NULL)
+		if (hCancellationEvents[i] == NULL)
 			return -3;
 	}
 
@@ -57,56 +54,7 @@ int ThreadRunner::InitSyncObjects()
 }
 
 
-void ThreadRunner::CleanSyncObjects()
-{
-	DeleteCriticalSection(&csConsole);
-	DeleteCriticalSection(&csArray);
-
-	CloseHandle(hWriteEvent);
-
-	for (int i = 0; i < thAmount; i++)
-	{
-		CloseHandle(hFinishEvents[i]);
-		CloseHandle(hContinueEvents[i]);
-		CloseHandle(hTerminateEvents[i]);
-	}
-
-	delete[] hFinishEvents;
-	delete[] hTerminateEvents;
-	delete[] hContinueEvents;
-}
-
-
-int ThreadRunner::CreateAndRunThreads(int* a, int size, int thAmount)
-{
-	ThreadRunner::thAmount = thAmount;
-
-	if (InitSyncObjects() != 0)
-		return -1;
-
-	InitData(a, size);
-
-	for (int i = 0; i < thAmount; i++)
-	{
-		threads[i] = new SimpleThread(functions[i], &params[i]);
-
-		if (!threads[i]->RunThread())
-		{
-			std::cout << "Thread creation error occured";
-
-			CleanData();
-			CleanSyncObjects();
-
-			return -3;
-		}
-	}
-
-	SetEvent(hWriteEvent);
-	return 0;
-}
-
-
-void ThreadRunner::InitData(int* a, int size)
+void ThreadRunner::InitData()
 {
 	functions = new ThreadFunc[thAmount];
 
@@ -123,7 +71,7 @@ void ThreadRunner::InitData(int* a, int size)
 		params[i].hWriteEvent = hWriteEvent;
 		params[i].hFinishEvent = hFinishEvents[i];
 		params[i].hContinueEvent = hContinueEvents[i];
-		params[i].hTerminateEvent = hTerminateEvents[i];
+		params[i].hTerminateEvent = hCancellationEvents[i];
 
 		params[i].sleepInterval = 5;
 		params[i].thNum = i + 1;
@@ -133,7 +81,31 @@ void ThreadRunner::InitData(int* a, int size)
 }
 
 
-bool ThreadRunner::TerminateThread(int i)
+int ThreadRunner::CreateAndRunThreads()
+{
+	ThreadRunner::thAmount = thAmount;
+
+	for (int i = 0; i < thAmount; i++)
+	{
+		threads[i] = new SimpleThread(functions[i], &params[i]);
+
+		if (!threads[i]->RunThread())
+		{
+			std::cerr << "Thread creation error occured";
+
+			CleanData();
+			CleanSyncObjects();
+
+			return -3;
+		}
+	}
+
+	SetEvent(hWriteEvent);
+	return 0;
+}
+
+
+bool ThreadRunner::TryCancelThread(int i)
 {
 	if (threads[i] == nullptr)
 		return false;
@@ -159,7 +131,7 @@ void ThreadRunner::ResetThreads()
 }
 
 
-void ThreadRunner::PrintData(int * a, int size)
+void ThreadRunner::PrintData() const
 {
 	std::cout << "Result array:\n";
 	for (int i = 0; i < size; i++)
@@ -177,10 +149,28 @@ void ThreadRunner::WaitThreads()
 }
 
 
+void ThreadRunner::CleanSyncObjects()
+{
+	DeleteCriticalSection(&csConsole);
+	DeleteCriticalSection(&csArray);
+
+	CloseHandle(hWriteEvent);
+
+	for (int i = 0; i < thAmount; i++)
+	{
+		CloseHandle(hFinishEvents[i]);
+		CloseHandle(hContinueEvents[i]);
+		CloseHandle(hCancellationEvents[i]);
+	}
+
+	delete[] hFinishEvents;
+	delete[] hCancellationEvents;
+	delete[] hContinueEvents;
+}
+
+
 int ThreadRunner::CleanData()
 {
-	CleanSyncObjects();
-
 	for (int i = 0; i < thAmount; i++)
 		delete threads[i];
 
@@ -191,4 +181,11 @@ int ThreadRunner::CleanData()
 	delete[] functions;
 
 	return 0;
+}
+
+
+ThreadRunner::~ThreadRunner()
+{
+	CleanSyncObjects();
+	CleanData();
 }
