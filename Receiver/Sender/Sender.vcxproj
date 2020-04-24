@@ -123,16 +123,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="File.cpp" />
+    <ClCompile Include="..\Receiver\File.cpp" />
+    <ClCompile Include="..\Receiver\Mutex.cpp" />
     <ClCompile Include="InputProvider.cpp" />
-    <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="SenderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="File.h" />
+    <ClInclude Include="..\Receiver\File.h" />
+    <ClInclude Include="..\Receiver\Mutex.h" />
+    <ClInclude Include="..\Receiver\Names.h" />
     <ClInclude Include="InputProvider.h" />
-    <ClInclude Include="Mutex.h" />
-    <ClInclude Include="Names.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

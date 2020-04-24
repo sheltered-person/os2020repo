@@ -20,10 +20,13 @@ public:
 
 	bool NextMessage(std::string& meassage) const;
 
+	bool WriteMessage(const std::string& message);
+
 	bool RewriteFile();
 
 	int FileSize() const;
 
+	int RecordsCount() const;
+
 	virtual ~File();
 };
-

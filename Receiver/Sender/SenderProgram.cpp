@@ -3,9 +3,9 @@
 #include <string>
 
 #include "InputProvider.h"
-#include "Names.h"
-#include "File.h"
-#include "Mutex.h"
+#include "..\\Receiver\File.h"
+#include "..\\Receiver\Names.h"
+#include "..\\Receiver\Mutex.h"
 
 
 void WaitAccess(Mutex* mutex, File* file)

@@ -21,24 +21,24 @@
     <ClCompile Include="InputProvider.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
+    <ClCompile Include="..\Receiver\File.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Mutex.cpp">
+    <ClCompile Include="..\Receiver\Mutex.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Names.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="InputProvider.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="File.h">
+    <ClInclude Include="..\Receiver\File.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Mutex.h">
+    <ClInclude Include="..\Receiver\Mutex.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Receiver\Names.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

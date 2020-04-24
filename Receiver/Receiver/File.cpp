@@ -53,6 +53,22 @@ bool File::NextMessage(std::string& message) const
 }
 
 
+bool File::WriteMessage(const std::string & message)
+{
+	SetFilePointer(hFile, 0, nullptr, FILE_END);
+
+	BOOL isWriten = WriteFile(
+		hFile,
+		message.c_str(),
+		MESSAGE_SIZE,
+		nullptr,
+		nullptr
+	);
+
+	return isWriten;
+}
+
+
 bool File::RewriteFile()
 {
 	char* fileContents = new char[MESSAGE_SIZE * recordsCount];
@@ -72,7 +88,7 @@ bool File::RewriteFile()
 		if (readBytesCount == 0)
 			break;
 
-		memcpy_s(fileContents + MESSAGE_SIZE * linesCount, 
+		memcpy_s(fileContents + MESSAGE_SIZE * linesCount,
 			MESSAGE_SIZE, currentLine, MESSAGE_SIZE);
 
 		linesCount++;
@@ -90,6 +106,12 @@ int File::FileSize() const
 {
 	DWORD hightSize;
 	return GetFileSize(hFile, &hightSize);
+}
+
+
+int File::RecordsCount() const
+{
+	return recordsCount;
 }
 
 

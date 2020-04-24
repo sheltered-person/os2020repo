@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "Names.h"
+#include "..\\Receiver\Names.h"
 
 
 class InputProvider
